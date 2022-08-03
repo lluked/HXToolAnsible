@@ -1,0 +1,20 @@
+---
+
+- name: Install python3-env
+  block:
+    - name: Return python version
+      ansible.builtin.command: python3 --version
+      register: python3_version_result
+
+    - name: Extract python3_version
+      set_fact:
+        python3_version: "{{ python3_version_result.stdout | regex_search(regexp, '\\1')}}"
+      vars:
+        regexp: 'Python (\d+\.\d+)'
+
+    - name: Install venv
+      ansible.builtin.apt:
+        name: ['python{{ python3_version }}-venv']
+        state: present
+      become: true
+  when: ansible_facts['distribution_version'] == "22.04"

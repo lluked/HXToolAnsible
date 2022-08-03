@@ -1,0 +1,13 @@
+---
+
+- hosts: ['localhost','all']
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+
+  pre_tasks:
+    - include: playbooks/main.yml
+
+  roles:
+    - role: common/ansible_facts
+    - role: prepare
+    - role: hxtool

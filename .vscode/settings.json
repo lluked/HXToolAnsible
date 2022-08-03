@@ -1,0 +1,15 @@
+{
+    "cSpell.words": [
+        "chdir",
+        "hxtool",
+        "isdir",
+        "playbook",
+        "psycopg",
+        "pydbus",
+        "pymongo",
+        "vars",
+        "venv",
+        "virtualenv"
+    ],
+    "terminal.integrated.scrollback": 10000
+}

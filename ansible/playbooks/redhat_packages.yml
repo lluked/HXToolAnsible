@@ -1,0 +1,7 @@
+---
+
+- name: Install required packages
+  ansible.builtin.yum:
+    name: ['yum-utils', 'unzip']
+    state: present
+  become: true

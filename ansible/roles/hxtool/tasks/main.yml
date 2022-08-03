@@ -1,0 +1,5 @@
+---
+
+- name: Import linux tasks
+  import_tasks: linux_main.yml
+  when: ansible_facts['system']|lower == 'linux'

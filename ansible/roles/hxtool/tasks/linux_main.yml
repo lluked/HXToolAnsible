@@ -1,0 +1,147 @@
+---
+
+## Create service group + service account
+- name: Create group
+  ansible.builtin.group:
+    name: "{{ HXTool_Group }}"
+    gid: "{{ HXTool_Group_gid }}"
+    state: present
+  become: true
+
+- name: Create service account
+  ansible.builtin.user:
+    name: "{{ HXTool_User }}"
+    password: '!'    
+    uid: "{{ HXTool_User_uid }}"
+    group: "{{ HXTool_Group_gid }}"
+    comment: HXTool service account
+    create_home: false
+    shell: /usr/sbin/nologin
+    state: present
+  become: true
+
+## Create install directory
+- name: Create HXTool install directory
+  ansible.builtin.file:
+    path: "{{ HXTool_Install_Directory }}"
+    owner: "{{ HXTool_User }}"
+    group: "{{ HXTool_Group }}"
+    state: directory
+    mode: 'a+rwx,g-w,o-rwx'
+  become: true
+
+## Install hxtool from github
+- name: Set release_dir
+  ansible.builtin.set_fact:
+    release_dir: "{{ HXTool_Install_Directory }}/{{ HXTool_Release }}"
+
+- name: Check if HXTool exists
+  ansible.builtin.stat:
+    path: "{{ release_dir }}"
+  become: true
+  register: hxtool_check
+
+- name: Checkout HXTool if release doesn't already exist
+  ansible.builtin.git:
+    repo: 'https://github.com/fireeye/HXTool.git'
+    dest: "{{ release_dir }}"
+    version: "{{ HXTool_Release }}"
+  register: HXTool_download
+  become: true
+  when: hxtool_check.stat.isdir is not defined
+
+## Create virtualenv
+- name: Set virtualenv_dir
+  ansible.builtin.set_fact:
+    virtualenv_dir: "{{ release_dir }}/venv"
+
+- name: Check if virtualenv exists
+  ansible.builtin.stat:
+    path: "{{ virtualenv_dir }}"
+  become: true
+  register: virtualenv_check
+
+- name: Create virtualenv if it doesn't already exist
+  block:
+    - name: Create virtualenv and install requirements
+      ansible.builtin.pip:
+        requirements: "{{ release_dir }}/requirements.txt"
+        virtualenv: "{{ virtualenv_dir }}"
+        virtualenv_command: "python3 -m venv"
+
+    - name: Install optional packages
+      ansible.builtin.pip: 
+        name: [pymongo, psycopg2-binary, pydbus]
+        virtualenv: "{{ virtualenv_dir }}"
+        virtualenv_command: "python3 -m venv"
+  become: true
+  when: virtualenv_check.stat.isdir is not defined
+
+## Permissions
+- name: Set permissions recursively on install
+  ansible.builtin.file:
+    path: "{{ release_dir }}/"
+    owner: "{{ HXTool_User }}"
+    group: "{{ HXTool_Group }}"
+    mode: 'a+rwx,g-w,o-rwx'
+    recurse: yes
+  become: true
+
+## Firewall
+- name: Configure redhat firewall
+  block:
+    - name: Open port 8080
+      ansible.builtin.command: firewall-cmd --permanent --add-port=8080/tcp
+
+    - name: Reload firewall
+      ansible.builtin.command: firewall-cmd --reload
+  become: true
+  when: ansible_facts['os_family']|lower == 'redhat'
+
+## Install service
+- name: Install HXTool service
+  block:
+    - name: Template HXTool.service into place
+      ansible.builtin.template:
+        src: HXTool.service.j2
+        dest: /etc/systemd/system/HXTool.service
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Reload systemctl daemons
+      ansible.builtin.shell:
+        cmd: systemctl daemon-reload
+
+    - name: Enable HXTool systemctl daemon
+      ansible.builtin.shell:
+        cmd: systemctl enable HXTool
+
+    - name: Start HXTool systemctl daemon
+      ansible.builtin.shell:
+        cmd: systemctl start HXTool
+  become: true
+
+- name: Pause before checking service status
+  ansible.builtin.pause:
+    seconds: 5
+
+## Debug
+- name: Collect facts about system services
+  ansible.builtin.service_facts:
+
+- name: Return status of HXTool service
+  debug:
+    var: ansible_facts.services['HXTool.service']
+
+- name: Return journalctl if service is not running
+  block:
+    - name: Return journalctl
+      ansible.builtin.command: journalctl -u HXTool.service -n 10
+      register: HXTool_service_status
+      become: true
+
+    - name: Show journalctl
+      debug:
+        var: HXTool_service_status
+  when: ansible_facts.services['HXTool.service'].state != "running"

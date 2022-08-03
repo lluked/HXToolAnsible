@@ -1,0 +1,6 @@
+---
+
+- name: Template ansible_facts to pretty json.
+  ansible.builtin.template:
+    src: ansible_facts.j2
+    dest: "ansible_facts-{{ ansible_distribution }}-{{ ansible_distribution_version }}.json"

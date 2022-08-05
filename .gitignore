@@ -1,3 +1,4 @@
 .DS_STORE
 .vagrant
+packer/output
 ansible_facts-*.json

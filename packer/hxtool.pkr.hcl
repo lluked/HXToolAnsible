@@ -95,7 +95,7 @@ build {
     cd_label         = "${var.ubuntu_cd_label}"
     cd_content       = {
       "meta-data" = ""
-      "user-data" = templatefile("templates/user-data.pkrtpl.hcl", { interface = "ens33" })
+      "user-data" = templatefile("ubuntu/templates/user-data.pkrtpl.hcl", { interface = "ens33" })
     }
     boot_wait        = "${var.ubuntu_boot_wait_vmware}"
     boot_command     = "${var.ubuntu_boot_command}"
@@ -119,9 +119,9 @@ build {
     playbook_file = "../ansible/site.yml"
   }
 
-  post-processor "checksum" {
-    checksum_types = ["sha256"]
-    output = "output/${var.ubuntu_vm_name}_virtualbox/${var.ubuntu_vm_name}.{{ .ChecksumType }}"
-  }
+  // post-processor "checksum" {
+  //   checksum_types = ["sha256"]
+  //   output = "output/${var.ubuntu_vm_name}_virtualbox/${var.ubuntu_vm_name}.{{ .ChecksumType }}"
+  // }
 
 }

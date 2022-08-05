@@ -4,6 +4,7 @@
         "hxtool",
         "isdir",
         "playbook",
+        "playbooks",
         "psycopg",
         "pydbus",
         "pymongo",

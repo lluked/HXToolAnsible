@@ -1,18 +1,29 @@
+###
+### Variables
+###
+
+variable "root_password" {
+  description = "The password of the root account"
+  type = string
+  sensitive = true
+  default = "packer"
+}
+
+variable "build_username" {
+  description = "The username of the build account that connects via ssh"
+  type = string
+  sensitive = true
+  default = "packer"
+}
+
+variable "build_password" {
+  description = "The password of the build account that connects via ssh"
+  type = string
+  sensitive = true
+  default = "packer"
+}
+
 # SSH
-
-variable "ssh_username" {
-  description = "The username to connect to SSH with. Required if using SSH."
-  type = string
-  sensitive = true
-  default = "packer"
-}
-
-variable "ssh_password" {
-  description = "A plaintext password to use to authenticate with SSH."
-  type = string
-  sensitive = true
-  default = "packer"
-}
 
 variable "ssh_pty" {
   description = "If true, a PTY will be requested for the SSH connection."

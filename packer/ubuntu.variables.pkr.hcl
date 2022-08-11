@@ -1,3 +1,7 @@
+###
+### Ubuntu Variables
+###
+
 # Build
 variable "ubuntu_vm_name" {
   description = "This is the name of the output file for the new virtual machine."
@@ -52,7 +56,7 @@ variable "ubuntu_iso_path" {
 }
 
 variable "ubuntu_iso_url" {
-  description = "A URL to the ISO containing the installation image or virtual hard drive (VHD or VHDX) file to clone."
+  description = "A URL to the ISO containing the installation image."
   type = string
 }
 

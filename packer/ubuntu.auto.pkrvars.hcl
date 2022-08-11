@@ -1,6 +1,9 @@
-# Ubuntu Variables
+###
+### Ubuntu Auto Variables
+###
+
 ubuntu_vm_name = "HXTool-Ubuntu"
-// ubuntu_headless = false
+ubuntu_headless = false
 ubuntu_iso_name = "ubuntu-22.04-live-server-amd64.iso"
 ubuntu_iso_url = "https://releases.ubuntu.com/22.04/ubuntu-22.04-live-server-amd64.iso"
 ubuntu_iso_path = "./ubuntu/iso"

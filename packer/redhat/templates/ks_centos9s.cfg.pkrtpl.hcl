@@ -67,11 +67,10 @@ skipx
 #
 
 # Root password
-# Example: encrypted password is "packer"
-rootpw --iscrypted $6$$jPMjPR6soE6sGjVBg1uO7Vt16UCnTW/qTIfJ9eZE8bEzJk5jNNogZH/fc6RY8IoUkvecKQavwIp7a8guVhbDf/
+rootpw ${rootpw}
 
-# Add a user named packer
-user --groups=wheel --name=packer --password=packer --gecos="vagrant"
+# Add build user
+user --groups=wheel --name=${name} --password=${password} --gecos="${name}"
 
 ###
 ## Installation
@@ -95,18 +94,13 @@ python
 %end
 
 #####################
-###    anaconda    ##
-#####################
-
-# %anaconda
-# pwpolicy root --minlen=6 --minquality=1 --notstrict --nochanges --notempty
-# pwpolicy user --minlen=6 --minquality=1 --notstrict --nochanges --emptyok
-# %end
-
-#####################
 ###      Post      ##
 #####################
 
 %post
+# Add build user to sudoers
+echo "${name}        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers.d/${name}
+chmod 440 /target/etc/sudoers.d/${name}
+# Update
 sudo yum update -y
 %end

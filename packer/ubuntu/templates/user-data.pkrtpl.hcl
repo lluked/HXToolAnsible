@@ -3,8 +3,8 @@ autoinstall:
     version: 1
     identity:
         hostname: ubuntu-server
-        username: packer
-        password: '$6$$jPMjPR6soE6sGjVBg1uO7Vt16UCnTW/qTIfJ9eZE8bEzJk5jNNogZH/fc6RY8IoUkvecKQavwIp7a8guVhbDf/'
+        username: root
+        password: $6$$jPMjPR6soE6sGjVBg1uO7Vt16UCnTW/qTIfJ9eZE8bEzJk5jNNogZH/fc6RY8IoUkvecKQavwIp7a8guVhbDf/
     keyboard:
         layout: gb
     locale: en_GB
@@ -20,6 +20,15 @@ autoinstall:
     storage:
         layout:
             name: lvm
+
+    users:
+    - default
+    - name: ${name}
+        gecos: Foo B. Bar
+        primary_group: foobar
+        groups: users
+        passwd: $6$$jPMjPR6soE6sGjVBg1uO7Vt16UCnTW/qTIfJ9eZE8bEzJk5jNNogZH/fc6RY8IoUkvecKQavwIp7a8guVhbDf/
+
     late-commands:
-        - 'echo "packer    ALL=(ALL)    NOPASSWD: ALL" > /target/etc/sudoers.d/packer'
-        - chmod 440 /target/etc/sudoers.d/packer
+        - 'echo "${name}    ALL=(ALL)    NOPASSWD: ALL" > /target/etc/sudoers.d/${name}'
+        - chmod 440 /target/etc/sudoers.d/${name}

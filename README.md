@@ -26,7 +26,8 @@ Footer
 
 This project carries the Unlicense license in respect to the project itself. However, please note the HXTool license in regards to HXTool itself.
 
-## Ansible
+## Ansible Configuration
+Can be run independently or used by Vagrant and Packer to create Boxes / Virtual Machines. The following is carried out by ansible:
 - OS is updated
 - Dependencies are installed if required
 - User account and group are made for HXTool
@@ -36,15 +37,23 @@ This project carries the Unlicense license in respect to the project itself. How
 - Service is installed
 
 ## Vagrant
-Running `vagrant up` from the project directory brings up both Debian and RedHat boxes. The Debian box mounts host port 8081 to 8080 on the guest, the RedHat box mounts 8082 to 8080. Running `vagrant up debian` will bring only the debian box up; the same goes for `vagrant up redhat`, and ssh with `vagrant ssh`.
+Running `vagrant up` from the project directory brings all boxes, this is not advised.
+- The Debian Virtualbox box mounts host port 8081 to 8080 on the guest, run `vagrant up debian-virtualbox`
+- The RedHat Virtualbox box mounts host port 8082 to 8080 on the guest, run `vagrant up redhat-virtualbox`
+- The Debian VMWare box mounts host port 8083 to 8080 on the guest, run `vagrant up debian-vmware`
+- The RedHat VMWare box mounts host port 8084 to 8080 on the guest, run `vagrant up redhat-vmware`
+
+## Packer
+Builds a HXTool virtual machine from scratch. For more details see `README.md` inside the packer folder.
 
 ## To Do
-- Implement Windows roles and Vagrantfile
-- Implement other providers (VMWare, Hyper-V)
-- Implement Packer to build virtual machines from scratch
+- Implement Windows roles ~~and Vagrantfile~~
+- Implement other providers (~~VMWare,~~ Hyper-V)
+- ~~Implement Packer to build virtual machines from scratch~~
+- Implement NGINX + Gunicorn
 
 ## Notes
-The following warning provided by HXTool is provided when running `hxtool.py` and this still remains true:
+The following warning is provided by Flask when running `hxtool.py` and this still remains true:
 
 ```
 WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.

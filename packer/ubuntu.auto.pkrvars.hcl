@@ -2,17 +2,19 @@
 ### Ubuntu Auto Variables
 ###
 
-ubuntu_vm_name = "HXTool-Ubuntu"
-ubuntu_headless = false
-ubuntu_iso_name = "ubuntu-22.04-live-server-amd64.iso"
-ubuntu_iso_url = "https://releases.ubuntu.com/22.04/ubuntu-22.04-live-server-amd64.iso"
-ubuntu_iso_path = "./ubuntu/iso"
-ubuntu_iso_checksum_type = "file"
-ubuntu_iso_checksum = "https://releases.ubuntu.com/22.04/SHA256SUMS"
-ubuntu_boot_command = [
+ubuntu_vm_name              = "HXTool-Ubuntu"
+ubuntu_headless             = false
+# If download fails update iso_name and iso_url to latest release
+ubuntu_iso_name             = "ubuntu-22.04.1-live-server-amd64.iso"
+ubuntu_iso_url              = "https://releases.ubuntu.com/22.04.1/ubuntu-22.04.1-live-server-amd64.iso"
+ubuntu_iso_path             = "./ubuntu/iso"
+ubuntu_iso_checksum_type    = "file"
+ubuntu_iso_checksum         = "https://releases.ubuntu.com/22.04/SHA256SUMS"
+ubuntu_boot_command         = [
   "e<down><down><down><end>",
   " autoinstall ds=nocloud;",
+  "<wait>",
   "<F10>",
 ]
-ubuntu_boot_wait_virtualbox = "3s"
-ubuntu_boot_wait_vmware = "5s"
+ubuntu_boot_wait_virtualbox = "5s"
+ubuntu_boot_wait_vmware     = "5s"

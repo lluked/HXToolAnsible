@@ -2,25 +2,32 @@
 ### Variables
 ###
 
-variable "root_password" {
-  description = "The password of the root account"
+variable "redhat_root_password" {
+  description = "The password of the root account."
   type = string
   sensitive = true
   default = "packer"
 }
 
 variable "build_username" {
-  description = "The username of the build account that connects via ssh"
+  description = "The username of the build account that connects via ssh."
   type = string
   sensitive = true
   default = "packer"
 }
 
 variable "build_password" {
-  description = "The password of the build account that connects via ssh"
+  description = "The password of the build account that connects via ssh."
   type = string
   sensitive = true
   default = "packer"
+}
+
+variable "build_password_crypted" {
+  description = " The crypted password of the build account, must be the crypt of build_password."
+  type = string
+  sensitive = true
+  default = "$6$$jPMjPR6soE6sGjVBg1uO7Vt16UCnTW/qTIfJ9eZE8bEzJk5jNNogZH/fc6RY8IoUkvecKQavwIp7a8guVhbDf/"
 }
 
 # SSH

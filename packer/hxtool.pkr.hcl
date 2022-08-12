@@ -62,7 +62,7 @@ build {
     cd_label         = "${var.ubuntu_cd_label}"
     cd_content       = {
       "meta-data" = ""
-      "user-data" = templatefile("./ubuntu/templates/user-data.pkrtpl.hcl", { interface = "enp0s3", name="${var.build_username}" })
+      "user-data" = templatefile("ubuntu/templates/user-data.pkrtpl.hcl", { name="${var.build_username}", password="${var.build_password_crypted}" })
     }
     boot_wait        = "${var.ubuntu_boot_wait_virtualbox}"
     boot_command     = "${var.ubuntu_boot_command}"
@@ -81,7 +81,7 @@ build {
     iso_urls         = ["${var.redhat_iso_path}/${var.redhat_iso_name}", "${var.redhat_iso_url}"]
     cd_label         = "${var.redhat_cd_label}"
     cd_content       = {
-      "ks.cfg" = templatefile("./redhat/templates/ks_centos9s.cfg.pkrtpl.hcl", { rootpw="${var.root_password}", name="${var.build_username}", password="${var.build_password}" })
+      "ks.cfg" = templatefile("./redhat/templates/ks_centos9s.cfg.pkrtpl.hcl", { rootpw="${var.redhat_root_password}", name="${var.build_username}", password="${var.build_password}" })
     }
     boot_wait        = "${var.redhat_boot_wait_virtualbox}"
     boot_command     = "${var.redhat_boot_command}"
@@ -100,7 +100,7 @@ build {
 
 build {
 
-  name = "vmware-iso"
+  name = "vmware"
 
   source "vmware-iso.default" {
     name             = "ubuntu"
@@ -112,7 +112,7 @@ build {
     cd_label         = "${var.ubuntu_cd_label}"
     cd_content       = {
       "meta-data" = ""
-      "user-data" = templatefile("ubuntu/templates/user-data.pkrtpl.hcl", { interface = "ens33", name="${var.build_username}" })
+      "user-data" = templatefile("ubuntu/templates/user-data.pkrtpl.hcl", { name="${var.build_username}", password="${var.build_password_crypted}" })
     }
     boot_wait        = "${var.ubuntu_boot_wait_vmware}"
     boot_command     = "${var.ubuntu_boot_command}"
@@ -127,7 +127,7 @@ build {
     iso_urls         = ["${var.redhat_iso_path}/${var.redhat_iso_name}", "${var.redhat_iso_url}"]
     cd_label         = "${var.redhat_cd_label}"
     cd_content       = {
-      "ks.cfg" = templatefile("./redhat/templates/ks_centos9s.cfg.pkrtpl.hcl", { rootpw="${var.root_password}", name="${var.build_username}", password="${var.build_password}" })
+      "ks.cfg" = templatefile("./redhat/templates/ks_centos9s.cfg.pkrtpl.hcl", { rootpw="${var.redhat_root_password}", name="${var.build_username}", password="${var.build_password}" })
     }
     boot_wait        = "${var.redhat_boot_wait_virtualbox}"
     boot_command     = "${var.redhat_boot_command}"
